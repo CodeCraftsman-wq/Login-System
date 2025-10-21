@@ -2,14 +2,24 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const path=require("path");
 
-const connectDB=require("./db");
+const connectDB=require('./db');
 const User = require("./models/User");
+
+require('dotenv') .config();
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}) .then(() => console.log('MongoDB connected')) .catch((err) => console.log(err));
+
+
 
 
 const app=express();
 const PORT=3000;
 
-connectDB();
+// connectDB();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname,"public")));
