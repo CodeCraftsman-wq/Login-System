@@ -5,6 +5,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  scrollbar-gutter: stable;
 }
 
 .login-container {
@@ -34,3 +35,4 @@ button {
 button:hover {
   background-color: #45a049;
 }
+

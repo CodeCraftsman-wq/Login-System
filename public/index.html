@@ -1,116 +1,276 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Animated Login Page</title>
+  <title>Animated Login & Register | Agnik Konar</title>
 
-  <!-- ✅ Tailwind CSS -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Animate.css for entry animations -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-  <!-- ✅ Google Font -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #74ABE2, #5563DE);
-      overflow: hidden;
+      background: radial-gradient(circle at top left, #1a1a40, #05060f);
+      overflow-x: hidden;
+      cursor: none;
     }
 
-    /* floating bubble effect */
-    .bubble {
+    .orb {
       position: absolute;
-      background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
-      animation: float 10s infinite ease-in-out;
+      filter: blur(100px);
+      opacity: 0.7;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .orb1 {
+      width: 400px;
+      height: 400px;
+      top: -100px;
+      left: -100px;
+      background: #4f46e5;
+    }
+
+    .orb2 {
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      right: -150px;
+      background: #06b6d4;
+      animation-delay: 2s;
     }
 
     @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-30px); }
-      100% { transform: translateY(0px); }
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    input {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: white;
+    }
+
+    input::placeholder {
+      color: #cbd5e1;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #60a5fa;
+      box-shadow: 0 0 15px #60a5fa;
+    }
+
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(96,165,250,0.8) 0%, rgba(96,165,250,0.2) 60%, transparent 100%);
+      box-shadow: 0 0 30px rgba(96,165,250,0.5);
+      mix-blend-mode: screen;
+      transition: transform 0.1s ease-out, opacity 0.2s ease;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
+
+    .cursor-trail {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(147,197,253,0.8) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Password strength meter */
+    .strength-bar {
+      height: 6px;
+      border-radius: 4px;
+      transition: width 0.4s ease, background-color 0.4s ease;
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen relative overflow-hidden">
 
-  <!-- Floating bubbles for background -->
-  <div class="bubble w-20 h-20 top-10 left-10"></div>
-  <div class="bubble w-32 h-32 top-40 right-20"></div>
-  <div class="bubble w-16 h-16 bottom-20 left-1/4"></div>
+<body class="min-h-screen relative flex flex-col items-center justify-center px-4 py-16 text-gray-200">
 
-  <!-- Main container -->
-  <div class="animate__animated animate__fadeInDown bg-white bg-opacity-90 shadow-2xl rounded-2xl p-10 w-full max-w-md transform transition duration-500 hover:scale-105 hover:shadow-blue-300">
-    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Welcome Back 👋</h2>
+  <!-- Floating orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
 
-    <form action="/login" method="POST" class="space-y-6 animate__animated animate__fadeInUp">
-      <div>
-        <label class="block text-gray-600 mb-2 font-medium">Username</label>
-        <input
-          type="text"
-          name="username"
-          required
-          class="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-blue-500 transition duration-300"
-        />
-      </div>
+  <!-- Custom glowing cursor -->
+  <div class="cursor" id="cursor"></div>
 
-      <div>
-        <label class="block text-gray-600 mb-2 font-medium">Password</label>
-        <input
-          type="password"
-          name="password"
-          required
-          class="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-blue-500 transition duration-300"
-        />
-      </div>
-
-      <button
-        type="submit"
-        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold text-lg tracking-wide shadow-md hover:opacity-90 transform hover:-translate-y-1 transition-all duration-300"
-      >
-        Login
-      </button>
-    </form>
-
-    <p class="text-center text-sm text-gray-600 mt-6 animate__animated animate__fadeInUp">
-      Hint: username <strong>admin</strong> | password <strong>12345</strong>
-    </p>
+  <!-- Header -->
+  <header class="text-center mb-12 mt-24 animate__animated animate__fadeInDown">
+  <h1 class="text-5xl font-extrabold bg-gradient-to-r from-indigo-400 to-cyan-400 text-transparent bg-clip-text drop-shadow-lg">
+    Welcome to Login System 🚀
+  </h1>
+  <p class="mt-2 text-gray-400 tracking-wide">Next-Gen Login & Register with Smart Password Meter</p>
+</header>
 
 
+  <!-- Forms Container -->
+  <main class="flex flex-col md:flex-row gap-10 items-center justify-center w-full max-w-5xl animate__animated animate__fadeInUp">
 
-    <!-- Register Form -->
-<div class="bg-white shadow-lg rounded-xl p-8 w-full max-w-sm mx-auto mt-8 animate__animated animate__fadeIn">
-  <h2 class="text-2xl font-bold text-center mb-6 text-gray-700">Register</h2>
+    <!-- Login Section -->
+    <section class="glass-card rounded-3xl p-10 w-full max-w-md hover:scale-105 hover:shadow-cyan-400/40">
+      <h2 class="text-3xl font-semibold text-center mb-8 text-indigo-300">Sign In</h2>
 
-  <form id="registerForm" action="/register" method="POST" class="space-y-5">
-    <div>
-      <label class="block text-gray-600 mb-2">Username</label>
-      <input type="text" name="username" required
-             class="w-full border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
-    </div>
+      <form action="/login" method="POST" class="space-y-6" aria-label="Login Form">
+        <div>
+          <label for="login-username" class="block mb-2 text-sm text-gray-300">Username</label>
+          <input id="login-username" type="text" name="username" required placeholder="Enter username"
+            class="w-full px-4 py-3 rounded-lg border border-gray-500 transition" />
+        </div>
 
-    <div>
-      <label class="block text-gray-600 mb-2">Password</label>
-      <input type="password" name="password" required
-             class="w-full border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
-    </div>
+        <div>
+          <label for="login-password" class="block mb-2 text-sm text-gray-300">Password</label>
+          <input id="login-password" type="password" name="password" required placeholder="••••••••"
+            class="w-full px-4 py-3 rounded-lg border border-gray-500 transition" oninput="checkStrength(this.value, 'login-strength-bar', 'login-strength-text')" />
+          <div class="mt-2">
+            <div id="login-strength-bar" class="strength-bar bg-gray-600 w-0"></div>
+            <p id="login-strength-text" class="text-sm mt-1 text-gray-400">Enter password</p>
+          </div>
+        </div>
 
-    <button type="submit"
-            class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
-      Register
-    </button>
-  </form>
-</div>
+        <button type="submit"
+          class="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-blue-600 hover:to-indigo-600 transition-all font-semibold text-lg">
+          Login
+        </button>
+      </form>
 
+      <p class="text-center text-sm mt-6 text-gray-400">
+        Hint: username <strong>admin</strong> | password <strong>12345</strong>
+      </p>
+    </section>
 
+    <!-- Register Section -->
+    <section class="glass-card rounded-3xl p-10 w-full max-w-md hover:scale-105 hover:shadow-teal-400/40">
+      <h2 class="text-3xl font-semibold text-center mb-8 text-cyan-300">Register</h2>
 
-  <script src="script.js"></script>
+      <form action="/register" method="POST" class="space-y-6" aria-label="Register Form">
+        <div>
+          <label for="register-username" class="block mb-2 text-sm text-gray-300">Username</label>
+          <input id="register-username" type="text" name="username" required placeholder="Choose username"
+            class="w-full px-4 py-3 rounded-lg border border-gray-500 transition" />
+        </div>
+
+        <div>
+          <label for="register-password" class="block mb-2 text-sm text-gray-300">Password</label>
+          <input id="register-password" type="password" name="password" required placeholder="Create password"
+            class="w-full px-4 py-3 rounded-lg border border-gray-500 transition" oninput="checkStrength(this.value, 'register-strength-bar', 'register-strength-text')" />
+          <div class="mt-2">
+            <div id="register-strength-bar" class="strength-bar bg-gray-600 w-0"></div>
+            <p id="register-strength-text" class="text-sm mt-1 text-gray-400">Enter password</p>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-teal-600 hover:to-cyan-600 transition-all font-semibold text-lg">
+          Register
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 text-center text-sm text-gray-400 animate__animated animate__fadeInUp">
+    <p>&copy; 2025 <span class="text-indigo-400 font-semibold">Crafted by Agnik Konar</span> — All Rights Reserved.</p>
+  </footer>
+
+  <!-- Cursor + Password Strength Script -->
+  <script>
+    // Cursor effect
+    const cursor = document.getElementById('cursor');
+    let trails = [];
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      cursor.style.transform = 'translate(-50%, -50%) scale(1.2)';
+      cursor.style.opacity = 1;
+      setTimeout(() => cursor.style.transform = 'translate(-50%, -50%) scale(1)', 100);
+
+      const trail = document.createElement('div');
+      trail.classList.add('cursor-trail');
+      trail.style.left = e.clientX + 'px';
+      trail.style.top = e.clientY + 'px';
+      document.body.appendChild(trail);
+
+      trails.push(trail);
+      setTimeout(() => {
+        trail.style.opacity = 0;
+        trail.style.transform = 'translate(-50%, -50%) scale(0.5)';
+      }, 50);
+      setTimeout(() => {
+        trail.remove();
+        trails = trails.filter(t => t !== trail);
+      }, 400);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = 0;
+    });
+
+    // Password strength function
+    function checkStrength(password, barId, textId) {
+      const bar = document.getElementById(barId);
+      const text = document.getElementById(textId);
+      let strength = 0;
+
+      if (password.length >= 6) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      if (password.length === 0) {
+        bar.style.width = '0';
+        text.textContent = 'Enter password';
+        text.style.color = '#9ca3af';
+      } else if (strength === 1) {
+        bar.style.width = '25%';
+        bar.style.backgroundColor = '#f87171';
+        text.textContent = 'Weak';
+        text.style.color = '#f87171';
+      } else if (strength === 2) {
+        bar.style.width = '50%';
+        bar.style.backgroundColor = '#facc15';
+        text.textContent = 'Medium';
+        text.style.color = '#facc15';
+      } else if (strength === 3) {
+        bar.style.width = '75%';
+        bar.style.backgroundColor = '#34d399';
+        text.textContent = 'Strong';
+        text.style.color = '#34d399';
+      } else if (strength >= 4) {
+        bar.style.width = '100%';
+        bar.style.backgroundColor = '#10b981';
+        text.textContent = 'Very Strong';
+        text.style.color = '#10b981';
+      }
+    }
+  </script>
 </body>
 </html>
